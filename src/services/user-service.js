@@ -44,7 +44,27 @@ class UserService {
 
     checkPassword(userInputPlainPassword, encryptedPassword) {
         try {
-            return bcrypt.compareSync(userInputPlainPassword , encryptedPassword);
+            return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);
+        } catch (error) {
+            console.log("Something went wrong in the service layer", error);
+            throw error;
+        }
+    }
+
+    async signIn(email, plainPassword) {
+        try {
+            //1. find user
+            const user = await this.userRepository.getByEmail(email);
+            //2. compare plain password with encrypted password
+            const passwordMatch = this.checkPassword(plainPassword, user.password);
+            if (!passwordMatch) {
+                console.log("password doesn't match");
+                throw { error: "incorrect password" };
+            }
+            //3. create token and send it to user
+            const newJWT = this.createToken({ email: user.email, id: user.id });
+            return newJWT;
+
         } catch (error) {
             console.log("Something went wrong in the service layer", error);
             throw error;
