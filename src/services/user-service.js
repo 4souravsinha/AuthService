@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const UserRepository = require('../repository/user-repository');
 const { JWT_KEY } = require('../config/serverConfig');
+const AppErrors = require('../utils/error-handler');
 
 
 class UserService {
@@ -12,11 +13,12 @@ class UserService {
 
     async create(data) {
         try {
-            console.log("inside service");
             const user = await this.userRepository.create(data);
-            console.log("exiting service");
             return user;
         } catch (error) {
+            if (error.name == 'ValidationError') {
+                throw error;
+            }
             console.log("Something went wrong in the service layer");
             throw error;
         }

@@ -4,12 +4,10 @@ const userService = new UserService();
 
 const create = async (req, res) => {
     try {
-        console.log("inside controller");
         const response = await userService.create({
             email: req.body.email,
             password: req.body.password
         });
-        console.log("exiting controller");
         return res.status(201).json({
             success: true,
             message: 'Successfully created a new user',
@@ -18,11 +16,11 @@ const create = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: 'Something went wrong',
+        return res.status(error.statusCode).json({
+            message: error.message,
             data: {},
             success: false,
-            err: error
+            err: error.explanation
         });
     }
 }
