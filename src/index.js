@@ -4,7 +4,10 @@ const bodyParser = require('body-parser')
 const { PORT } = require('./config/serverConfig');
 const apiRoutes = require('./routes/index');
 
-const userService = require('./services/user-service');
+// const db = require('./models/index')
+const {User,Role} = require('./models/index')
+
+
 
 const app = express();
 
@@ -16,13 +19,15 @@ const prepareAndStartServer = async () => {
     app.listen(PORT, async () => {
         console.log(`Server started at ${PORT}`);
 
-        // const service = new userService();
-        // const newToken = service.createToken({email : "sourav@admin.com" , id : 1});
-        // console.log(typeof newToken);
-        // console.log("newToken is" , newToken);
-        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvdXJhdkBhZG1pbi5jb20iLCJpZCI6MSwiaWF0IjoxNjc0NDU2NDE0LCJleHAiOjE2NzQ0NTY0MTl9.RR5YrbhhqFx5aEAjvg5zdlj5i4DiurDOD-ZAwnJHq94";
-        // const response = service.verifyToken(token);
-        // console.log(response);
+        // db.sequelize.sync({ alter: true });
+
+        // const u1 = await User.findByPk(4);
+        // const r1 = await Role.findByPk(1);
+        // const r2 = await Role.findByPk(2);
+        // u1.addRole(r2);   add role
+        // u1.addRole(r1);
+        // const response = await r1.getUsers();
+        // console.log(response);               print response
     })
 }
 
